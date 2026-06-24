@@ -1,0 +1,56 @@
+{
+  "video_id": "video-fixture-001",
+  "comments": [
+    {
+      "comment_id": "c1",
+      "user_name": "root user",
+      "user_id": "user-id-c1",
+      "user_uid": "uid-c1",
+      "sec_uid": "sec-c1",
+      "comment_time": "2026-06-24T12:00:00+08:00",
+      "ip_location": "北京",
+      "like_count": 7,
+      "text": "fixture text c1",
+      "replies": [
+        {
+          "comment_id": "c1-1",
+          "user_name": "alice",
+          "user_id": "user-id-c1-1",
+          "user_uid": "uid-c1-1",
+          "sec_uid": "sec-c1-1",
+          "comment_time": "2026-06-24T12:01:00+08:00",
+          "ip_location": "上海",
+          "like_count": 5,
+          "text": "fixture text c1-1",
+          "replies": [
+            {
+              "comment_id": "c1-1-1",
+              "user_name": "third user",
+              "user_id": "user-id-c1-1-1",
+              "user_uid": "uid-c1-1-1",
+              "sec_uid": "sec-c1-1-1",
+              "comment_time": "2026-06-24T12:02:00+08:00",
+              "ip_location": "广州",
+              "like_count": 3,
+              "text": "fixture text c1-1-1",
+              "replies": [
+                {
+                  "comment_id": "c1-1-1-1",
+                  "user_name": "fourth user",
+                  "user_id": "user-id-c1-1-1-1",
+                  "user_uid": "uid-c1-1-1-1",
+                  "sec_uid": "sec-c1-1-1-1",
+                  "comment_time": "2026-06-24T12:03:00+08:00",
+                  "ip_location": "深圳",
+                  "like_count": 1,
+                  "text": "fixture text c1-1-1-1",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

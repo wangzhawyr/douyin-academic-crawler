@@ -1,0 +1,56 @@
+{
+  "video_id": "video-local-json-001",
+  "comments": [
+    {
+      "comment_id": "local-c1",
+      "user_name": "local root user",
+      "user_id": "local-user-id-c1",
+      "user_uid": "local-uid-c1",
+      "sec_uid": "local-sec-c1",
+      "comment_time": "2026-06-25T09:00:00+08:00",
+      "ip_location": "杭州",
+      "like_count": 10,
+      "text": "local json text c1",
+      "replies": [
+        {
+          "comment_id": "local-c1-1",
+          "user_name": "local second user",
+          "user_id": "local-user-id-c1-1",
+          "user_uid": "local-uid-c1-1",
+          "sec_uid": "local-sec-c1-1",
+          "comment_time": "2026-06-25T09:01:00+08:00",
+          "ip_location": "南京",
+          "like_count": 8,
+          "text": "local json text c1-1",
+          "replies": [
+            {
+              "comment_id": "local-c1-1-1",
+              "user_name": "local third user",
+              "user_id": "local-user-id-c1-1-1",
+              "user_uid": "local-uid-c1-1-1",
+              "sec_uid": "local-sec-c1-1-1",
+              "comment_time": "2026-06-25T09:02:00+08:00",
+              "ip_location": "苏州",
+              "like_count": 6,
+              "text": "local json text c1-1-1",
+              "replies": [
+                {
+                  "comment_id": "local-c1-1-1-1",
+                  "user_name": "local fourth user",
+                  "user_id": "local-user-id-c1-1-1-1",
+                  "user_uid": "local-uid-c1-1-1-1",
+                  "sec_uid": "local-sec-c1-1-1-1",
+                  "comment_time": "2026-06-25T09:03:00+08:00",
+                  "ip_location": "无锡",
+                  "like_count": 4,
+                  "text": "local json text c1-1-1-1",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "project_name": "douyin-academic-crawler",
+  "version": "v0.1.0-local-acceptance",
+  "status": "local acceptance build",
+  "generated_at": "2026-06-25",
+  "supported_input_modes": [
+    "mock",
+    "local_json"
+  ],
+  "supported_features": [
+    "mock mode",
+    "local_json mode",
+    "four-level comment tree export",
+    "CSV export",
+    "XLSX export",
+    "text cleaning",
+    "quality_report",
+    "audit.jsonl",
+    "one-click acceptance script"
+  ],
+  "unsupported_features": [
+    "real platform requests",
+    "automatic login",
+    "captcha bypass",
+    "rate-limit evasion",
+    "video download",
+    "profile video collection",
+    "keyword search collection"
+  ],
+  "safety_defaults": {
+    "mock_mode": true,
+    "allow_real_requests": false,
+    "real_request_warning_ack": false,
+    "max_pages_default": 1,
+    "max_pages_hard_limit": 5,
+    "max_depth_hard_limit": 4
+  },
+  "output_directories": {
+    "comments": "exports/comments",
+    "audit": "exports/audit",
+    "logs": "exports/logs",
+    "reports": "exports/reports"
+  },
+  "test_command": "python -m unittest discover -s tests -v",
+  "acceptance_commands": [
+    "python main.py --mock-run --config examples/sample_config.json",
+    "python main.py --mock-run --config examples/local_json_config.json"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "mock_mode": true,
+  "input_mode": "local_json",
+  "input_json_file": "examples/local_comment_tree_sample.json",
+  "allow_real_requests": false,
+  "real_request_warning_ack": false,
+  "max_pages_default": 1,
+  "max_pages_hard_limit": 5,
+  "max_depth_hard_limit": 4,
+  "enable_text_cleaning": true,
+  "remove_emoji": false,
+  "remove_urls": true,
+  "remove_mentions": false,
+  "export_xlsx": true,
+  "cookie_file": "cookie.txt",
+  "output_dir": "exports",
+  "sleep_min_seconds": 1.0,
+  "sleep_max_seconds": 2.0,
+  "request_timeout": 10.0,
+  "max_retry": 2,
+  "user_agent": "DouyinAcademicCrawler/0.1 research-only"
+}
