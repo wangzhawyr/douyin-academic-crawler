@@ -5,7 +5,8 @@
   "generated_at": "2026-06-25",
   "supported_input_modes": [
     "mock",
-    "local_json"
+    "local_json",
+    "official_api_skeleton"
   ],
   "supported_features": [
     "mock mode",
@@ -17,6 +18,9 @@
     "quality_report",
     "audit.jsonl",
     "one-click acceptance script"
+  ],
+  "reserved_features": [
+    "official_api skeleton for future official open-platform authorized API integration"
   ],
   "unsupported_features": [
     "real platform requests",

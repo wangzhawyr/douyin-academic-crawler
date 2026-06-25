@@ -87,6 +87,25 @@ class CrawlTaskRunner:
 
         if not task.video_id and not task.video_url:
             raise ValueError("video_id or video_url is required")
+
+        if self.config.input_mode == "official_api":
+            self._validate_official_api_task(task)
+        else:
+            self._validate_local_task(task)
+
+        if self._task_type_value(task) not in {
+            CrawlTaskType.COMMENT_TREE.value,
+            CrawlTaskType.PROFILE_VIDEOS.value,
+            CrawlTaskType.SEARCH_VIDEOS.value,
+        }:
+            raise ValueError("task_type must be comment_tree, profile_videos, or search_videos")
+
+        if not self.config.allow_real_requests and not self.service.mock_mode:
+            raise RuntimeError("当前处于 mock 验收模式，真实请求已被禁用。")
+
+    def _validate_local_task(self, task: CrawlTask) -> None:
+        """Validate mock/local_json task limits."""
+
         if task.max_depth < 1 or task.max_depth > self.config.max_depth_hard_limit:
             raise ValueError(
                 f"max_depth must be between 1 and {self.config.max_depth_hard_limit}"
@@ -99,14 +118,28 @@ class CrawlTaskRunner:
             raise ValueError(
                 f"max_pages must not exceed hard limit {self.config.max_pages_hard_limit}"
             )
-        if self._task_type_value(task) not in {
-            CrawlTaskType.COMMENT_TREE.value,
-            CrawlTaskType.PROFILE_VIDEOS.value,
-            CrawlTaskType.SEARCH_VIDEOS.value,
-        }:
-            raise ValueError("task_type must be comment_tree, profile_videos, or search_videos")
-        if not self.config.allow_real_requests and not self.service.mock_mode:
-            raise RuntimeError("当前处于 mock 验收模式，真实请求已被禁用。")
+
+    def _validate_official_api_task(self, task: CrawlTask) -> None:
+        """Validate official API small-sample task limits."""
+
+        if not self.config.allow_real_requests:
+            raise RuntimeError("official_api mode requires allow_real_requests=True.")
+        if not self.config.real_request_warning_ack:
+            raise RuntimeError("official_api mode requires real_request_warning_ack=True.")
+        if not task.video_id:
+            raise ValueError("official_api mode requires a single video_id.")
+        if task.max_pages is None:
+            task.max_pages = 1
+        if task.max_depth > self.config.official_max_depth_hard_limit:
+            raise ValueError(
+                f"official_api max_depth must not exceed {self.config.official_max_depth_hard_limit}"
+            )
+        if task.max_pages > self.config.official_max_pages_hard_limit:
+            raise ValueError(
+                f"official_api max_pages must not exceed {self.config.official_max_pages_hard_limit}"
+            )
+        if task.max_depth < 1 or task.max_pages < 1:
+            raise ValueError("official_api max_depth and max_pages must be positive")
 
     def _set_status(self, task: CrawlTask, status: CrawlTaskStatus) -> None:
         """Update task status and emit a log line."""

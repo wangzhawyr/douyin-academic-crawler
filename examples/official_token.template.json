@@ -1,0 +1,6 @@
+{
+  "access_token": "YOUR_ACCESS_TOKEN",
+  "refresh_token": "YOUR_REFRESH_TOKEN",
+  "expires_at": "YYYY-MM-DDTHH:MM:SS+08:00",
+  "scopes": ["video.comment"]
+}

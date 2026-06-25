@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping, Optional
 
@@ -17,6 +17,13 @@ class CrawlerConfig:
     input_json_file: Optional[str] = None
     allow_real_requests: bool = False
     real_request_warning_ack: bool = False
+    official_api_base_url: str = ""
+    official_client_key: str = ""
+    official_client_secret_file: Optional[str] = None
+    official_access_token_file: Optional[str] = None
+    official_scopes_required: list[str] = field(default_factory=lambda: ["video.comment"])
+    official_max_pages_hard_limit: int = 1
+    official_max_depth_hard_limit: int = 1
     max_pages_default: int = 1
     max_pages_hard_limit: int = 5
     max_depth_hard_limit: int = 4
@@ -59,6 +66,31 @@ class CrawlerConfig:
             allow_real_requests=bool(payload.get("allow_real_requests", cls.allow_real_requests)),
             real_request_warning_ack=bool(
                 payload.get("real_request_warning_ack", cls.real_request_warning_ack)
+            ),
+            official_api_base_url=str(
+                payload.get("official_api_base_url", cls.official_api_base_url)
+            ),
+            official_client_key=str(
+                payload.get("official_client_key", cls.official_client_key)
+            ),
+            official_client_secret_file=(
+                None
+                if payload.get("official_client_secret_file", cls.official_client_secret_file) is None
+                else str(payload.get("official_client_secret_file"))
+            ),
+            official_access_token_file=(
+                None
+                if payload.get("official_access_token_file", cls.official_access_token_file) is None
+                else str(payload.get("official_access_token_file"))
+            ),
+            official_scopes_required=list(
+                payload.get("official_scopes_required", ["video.comment"])
+            ),
+            official_max_pages_hard_limit=int(
+                payload.get("official_max_pages_hard_limit", cls.official_max_pages_hard_limit)
+            ),
+            official_max_depth_hard_limit=int(
+                payload.get("official_max_depth_hard_limit", cls.official_max_depth_hard_limit)
             ),
             max_pages_default=int(payload.get("max_pages_default", cls.max_pages_default)),
             max_pages_hard_limit=int(

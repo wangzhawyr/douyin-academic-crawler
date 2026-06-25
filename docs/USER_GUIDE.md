@@ -84,3 +84,26 @@ To clean old outputs:
 ## Academic Compliance
 
 This tool is for academic research workflows using mock fixtures or local JSON files. It does not provide automatic login, captcha bypass, rate-limit evasion, private endpoint access, or collection of inaccessible data.
+
+## Official API Skeleton
+
+`official_api` is a disabled-by-default skeleton for future official open-platform authorized APIs.
+
+It requires explicit configuration:
+
+- `allow_real_requests=true`
+- `real_request_warning_ack=true`
+- a local access token file
+- `video.comment` scope
+
+This release does not implement any official endpoint call yet and does not include private web/App URLs.
+
+Before implementing official API calls, complete:
+
+- `docs/OFFICIAL_API_CHECKLIST.md`
+- `examples/official_api_config.template.json`
+- `examples/official_token.template.json`
+
+Keep real token and secret files out of git. The default `.gitignore` excludes
+`cookie.txt`, `token.json`, `official_token.json`, `*token*.json`, and
+`*secret*.json`.

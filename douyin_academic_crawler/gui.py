@@ -165,6 +165,8 @@ class CommentCollectionFrame(ttk.Frame):
 
         if self.config.input_mode == "local_json":
             mode = "本地 JSON 导入模式"
+        elif self.config.input_mode == "official_api":
+            mode = "官方授权 API 骨架模式"
         elif self.config.input_mode == "mock":
             mode = "Mock 验收模式"
         else:

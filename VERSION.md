@@ -14,10 +14,12 @@ Status: local acceptance build
 - quality_report
 - audit.jsonl
 - one-click acceptance script
+- official_api safety skeleton for future official open-platform authorized APIs
 
 ## Currently Not Supported
 
 - real platform requests
+- implemented official API calls
 - automatic login
 - captcha bypass
 - rate-limit evasion

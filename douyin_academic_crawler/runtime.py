@@ -1,4 +1,4 @@
-"""Runtime assembly for local GUI and offline acceptance runs."""
+"""Runtime assembly for local GUI, offline, and official API skeleton modes."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from .config import CrawlerConfig, load_config
 from .gui import CommentCollectionFrame
 from .local_json_client import LocalJSONCommentClient
 from .mock_client import MockCommentAPIClient
+from .official_api_client import OfficialDouyinAPIClient
 from .rate_limit import SleepInterval
 from .service import CommentCollectionService
 from .storage import CSVCommentStore, CSVFailureLogger
@@ -75,15 +76,9 @@ def build_task_runner(
     *,
     log_callback: Callable[[str], None] | None = None,
 ) -> CrawlTaskRunner:
-    """Build a task runner wired to the configured offline input source."""
+    """Build a task runner wired to the configured input source."""
 
-    if config.input_mode == "real_request":
-        raise NotImplementedError("真实请求尚未启用。")
-    if config.input_mode not in {"mock", "local_json"}:
-        raise ValueError("input_mode must be mock or local_json")
-    if not config.mock_mode and not config.allow_real_requests:
-        raise NotImplementedError("当前处于 mock 验收模式，真实请求已被禁用。")
-
+    _validate_input_mode(config)
     directories = ensure_output_directories(config.output_dir)
     configure_runtime_logging(directories.logs)
 
@@ -93,6 +88,9 @@ def build_task_runner(
                 raise ValueError("input_json_file is required when input_mode=local_json")
             api_client = LocalJSONCommentClient(config.input_json_file)
             hash_salt = "local-json-import"
+        elif config.input_mode == "official_api":
+            api_client = OfficialDouyinAPIClient(config)
+            hash_salt = "official-api"
         else:
             api_client = MockCommentAPIClient()
             hash_salt = "mock-acceptance"
@@ -117,7 +115,7 @@ def build_task_runner(
         config=config,
         clock=datetime.now,
         log_callback=runtime_log,
-        mock_mode=True,
+        mock_mode=config.input_mode != "official_api",
     )
     return CrawlTaskRunner(
         service,
@@ -133,7 +131,7 @@ def build_mock_task_runner(
     *,
     log_callback: Callable[[str], None] | None = None,
 ) -> CrawlTaskRunner:
-    """Backward-compatible wrapper for local/offline task runner assembly."""
+    """Backward-compatible wrapper for task runner assembly."""
 
     return build_task_runner(config, log_callback=log_callback)
 
@@ -145,7 +143,7 @@ def run_mock_acceptance_task(
     max_depth: int = 4,
     progress: Callable[[str], None] | None = None,
 ) -> CrawlTaskResult:
-    """Run one offline comment task for local acceptance testing."""
+    """Run one configured task for local acceptance testing."""
 
     emit = progress or (lambda message: None)
     effective_config = config or CrawlerConfig()
@@ -157,9 +155,10 @@ def run_mock_acceptance_task(
         task_type=CrawlTaskType.COMMENT_TREE.value,
         video_id=video_id,
         video_url=f"https://example.invalid/{video_id}",
-        max_depth=max_depth,
+        max_depth=1 if effective_config.input_mode == "official_api" else max_depth,
+        max_pages=1 if effective_config.input_mode == "official_api" else None,
         output_dir=runner.service.output_dir,
-        researcher_note="local offline acceptance run",
+        researcher_note="local acceptance run",
     )
     logging.info("task created: %s", task.task_id)
     emit(f"task_id={task.task_id}")
@@ -178,12 +177,12 @@ def run_mock_acceptance_task(
 
 
 def launch_gui(config: CrawlerConfig | None = None) -> None:
-    """Launch the local Tkinter GUI in offline acceptance mode."""
+    """Launch the local Tkinter GUI."""
 
     effective_config = config or CrawlerConfig()
     runner = build_task_runner(effective_config)
     root = tk.Tk()
-    root.title("Douyin Academic Crawler - Offline Acceptance")
+    root.title("Douyin Academic Crawler")
     frame = CommentCollectionFrame(
         root,
         runner,
@@ -199,3 +198,19 @@ def load_runtime_config(config_path: Path | str | None = None) -> CrawlerConfig:
     """Load runtime config for CLI entry points."""
 
     return load_config(config_path)
+
+
+def _validate_input_mode(config: CrawlerConfig) -> None:
+    """Validate input mode safety switches before runner construction."""
+
+    if config.input_mode == "real_request":
+        raise NotImplementedError("真实请求尚未启用。")
+    if config.input_mode not in {"mock", "local_json", "official_api"}:
+        raise ValueError("input_mode must be mock, local_json, or official_api")
+    if config.input_mode == "official_api":
+        if not config.allow_real_requests:
+            raise RuntimeError("official_api mode requires allow_real_requests=True.")
+        if not config.real_request_warning_ack:
+            raise RuntimeError("official_api mode requires real_request_warning_ack=True.")
+    elif not config.mock_mode and not config.allow_real_requests:
+        raise NotImplementedError("当前处于 mock 验收模式，真实请求已被禁用。")

@@ -9,5 +9,11 @@ exports/
 logs/
 *.log
 
+cookie.txt
+token.json
+official_token.json
+*token*.json
+*secret*.json
+!examples/official_token.template.json
 .DS_Store
 Thumbs.db

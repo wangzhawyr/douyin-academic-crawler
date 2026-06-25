@@ -64,6 +64,10 @@ class AuditLogger:
             "input_json_file": self.config.input_json_file,
             "data_source_note": self._data_source_note(),
             "cleaning_enabled": self.config.enable_text_cleaning,
+            "official_api_mode": self.config.input_mode == "official_api",
+            "scopes_required": self.config.official_scopes_required,
+            "real_request_warning_ack": self.config.real_request_warning_ack,
+            "request_policy_note": self._request_policy_note(),
             "max_pages_hard_limit": self.config.max_pages_hard_limit,
             "max_depth_hard_limit": self.config.max_depth_hard_limit,
             "config_snapshot": self._config_snapshot(),
@@ -84,4 +88,16 @@ class AuditLogger:
             return "本任务使用本地 JSON 文件作为输入，不发起真实平台请求。"
         if self.config.input_mode == "mock":
             return "本任务使用内置 mock fixture 作为输入，不发起真实平台请求。"
+        if self.config.input_mode == "official_api":
+            return "本任务预留官方授权 API 模式，仅允许官方开放平台授权接口。"
         return "真实请求模式未启用。"
+
+    def _request_policy_note(self) -> str:
+        """Return a request policy note for audit."""
+
+        if self.config.input_mode == "official_api":
+            return (
+                "official_api 模式只允许未来接入官方开放平台授权 API；"
+                "不允许私有接口、自动登录、验证码绕过、频控规避或模拟攻击。"
+            )
+        return "当前任务不发起真实平台请求。"

@@ -8,6 +8,8 @@
 
 当前不支持：真实平台请求、自动登录、验证码绕过、频控规避、视频下载、主页作品采集、关键词搜索采集。
 
+`official_api` 模式目前仅是官方开放平台授权 API 的安全骨架：默认禁用真实请求，不包含任何私有接口地址或请求实现。
+
 面向学术研究的公开评论数据采集工具骨架。当前实现包含可测试的评论树采集服务、接口适配层、采集任务控制层、JSONL 审计日志、CSV/Excel 存储、脱敏、限速、异常日志和 GUI 层级选择辅助。
 
 本项目不包含真实平台私有接口地址，不提供自动登录、破解、绕过验证码、绕过频控或模拟攻击能力。
@@ -352,6 +354,35 @@ GUI 也提供“最大页数”输入框，默认值为 `1`，允许范围为 `1
 - `max_depth_hard_limit`
 - `config_snapshot`
 
+## official_api 官方授权 API 骨架说明
+
+`official_api` 是为未来接入抖音开放平台官方授权接口预留的安全骨架。本版本不填任何未经确认的接口地址，也不调用网页/App 私有接口。
+
+启用该模式必须同时满足：
+
+- `input_mode="official_api"`
+- `allow_real_requests=true`
+- `real_request_warning_ack=true`
+- 本地 token 文件存在
+- token scope 包含 `video.comment`
+
+默认安全限制：
+
+- `official_max_depth_hard_limit=1`
+- `official_max_pages_hard_limit=1`
+- 首次测试只能单个 `video_id`
+
+当前 `fetch_top_level_comments` 和 `fetch_comment_replies` 仍会抛出 `NotImplementedError`，等待用户提供官方文档参数后再实现。
+
+明确不支持：
+
+- 私有接口
+- 自动登录
+- 账号密码处理
+- 验证码绕过
+- 频控规避
+- 模拟攻击
+
 ## GUI 使用说明
 
 评论采集界面提供“最大评论层级”下拉框：
@@ -386,3 +417,18 @@ task_id：task-xxxxxxxxxxxx
 python -m unittest discover -s tests -v
 python -m compileall douyin_academic_crawler tests
 ```
+
+## Official API Preparation Checklist
+
+Before filling any official authorized API parameters, complete:
+
+- `docs/OFFICIAL_API_CHECKLIST.md`
+- `examples/official_api_config.template.json`
+- `examples/official_token.template.json`
+
+All sensitive values must remain local. The repository ignores `cookie.txt`,
+`token.json`, `official_token.json`, `*token*.json`, and `*secret*.json`.
+
+This project still does not include real platform requests, private endpoint
+URLs, automatic login, captcha bypass, rate-limit evasion, or reverse-engineered
+request logic.

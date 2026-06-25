@@ -1,0 +1,22 @@
+{
+  "mock_mode": false,
+  "input_mode": "official_api",
+  "allow_real_requests": false,
+  "real_request_warning_ack": false,
+  "official_api_base_url": "OFFICIAL_OPEN_PLATFORM_BASE_URL_FROM_DOCUMENTATION",
+  "official_client_key": "YOUR_OFFICIAL_CLIENT_KEY",
+  "official_client_secret_file": "official_client_secret.json",
+  "official_access_token_file": "official_token.json",
+  "official_scopes_required": ["video.comment"],
+  "official_max_pages_hard_limit": 1,
+  "official_max_depth_hard_limit": 1,
+  "max_pages_default": 1,
+  "max_pages_hard_limit": 1,
+  "max_depth_hard_limit": 1,
+  "output_dir": "exports",
+  "sleep_min_seconds": 1.0,
+  "sleep_max_seconds": 2.0,
+  "request_timeout": 10.0,
+  "max_retry": 0,
+  "user_agent": "DouyinAcademicCrawler/0.1 research-only"
+}

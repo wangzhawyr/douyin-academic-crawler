@@ -44,6 +44,17 @@ python -m compileall douyin_academic_crawler tests
 4. Wire the client in `runtime.build_task_runner`.
 5. Add tests proving no unintended network behavior.
 
+## official_api Skeleton
+
+`official_api` is reserved for official open-platform authorized APIs only. Keep these boundaries:
+
+- Do not add private web/App endpoints.
+- Do not add automatic login.
+- Do not process account passwords.
+- Do not bypass captchas.
+- Do not evade rate limits.
+- Keep `max_depth<=1` and `max_pages<=1` until official documents and approvals are provided.
+
 ## Safety Boundary
 
 Do not add automatic login, captcha bypass, private endpoint discovery, rate-limit evasion, or inaccessible-data collection. Any future lawful input source must preserve low-frequency controls, `max_pages` limits, audit logging, and explicit user configuration.
